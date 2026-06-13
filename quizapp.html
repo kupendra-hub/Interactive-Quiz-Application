@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placement Assessment Portal</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:linear-gradient(135deg,#f4a340,#ef7f3b);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.container{background:#fff;width:850px;max-width:100%;padding:30px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.2)}
+h1{text-align:center;color:#1e3a8a;margin-bottom:20px}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px}
+button{padding:12px 20px;border:none;border-radius:8px;background:#2563eb;color:white;cursor:pointer}
+button:hover{background:#1d4ed8}
+.hidden{display:none}
+.option{display:block;width:100%;padding:12px;margin:10px 0;border:2px solid #1e3a8a;border-radius:8px;background:#dbeafe;cursor:pointer;text-align:left}
+.option.selected{background:#2563eb;color:#fff}
+.company{border:1px solid #ddd;padding:12px;margin-top:10px;border-radius:8px;background:#f8f8f8}
+#timer{color:red;font-weight:bold;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div id="registrationPage">
+<h1>Placement Assessment Portal</h1>
+<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="usn" placeholder="USN">
+<input type="email" id="email" placeholder="Email">
+<input type="text" id="phone" placeholder="Phone Number">
+<input type="text" id="college" placeholder="College Name">
+<input type="text" id="department" placeholder="Department">
+<button onclick="showInstructions()">Proceed To Exam</button>
+</div>
+
+<div id="instructionPage" class="hidden">
+<h1>Exam Instructions</h1>
+<p>Total Questions: 10</p><br>
+<p>Time Per Question: 1 Minute</p><br>
+<p>No Negative Marking</p><br>
+<button onclick="startExam()">Start Exam</button>
+</div>
+
+<div id="quizPage" class="hidden">
+<h1>Interactive Quiz</h1>
+<p id="progress"></p>
+<p id="timer"></p>
+<h2 id="question"></h2>
+<div id="options"></div>
+<button onclick="nextQuestion()">Next</button>
+</div>
+
+<div id="resultPage" class="hidden">
+<h1>Quiz Completed</h1>
+<div id="studentInfo"></div>
+<h2 id="score"></h2>
+<div id="companies"></div>
+<button onclick="location.reload()">Restart</button>
+</div>
+
+</div>
+
+<script>
+const quizData=[
+{q:"What does HTML stand for?",o:["Hyper Text Markup Language","High Text Machine Language","Home Tool Markup Language","None"],a:0},
+{q:"CSS is used for?",o:["Database","Styling","Programming","Server"],a:1},
+{q:"JavaScript is used for?",o:["Interactivity","Styling","Database","OS"],a:0},
+{q:"HTML link tag?",o:["a","img","div","p"],a:0},
+{q:"CSS ID selector?",o:[".","#","@","*"],a:1},
+{q:"JavaScript developed by?",o:["Google","Netscape","Apple","IBM"],a:1},
+{q:"Console output method?",o:["echo()","print()","console.log()","show()"],a:2},
+{q:"Largest heading?",o:["h1","h6","head","title"],a:0},
+{q:"Image tag?",o:["img","pic","image","src"],a:0},
+{q:"Which is frontend?",o:["HTML","MySQL","Java","Python"],a:0}
+];
+
+let current=0,score=0,selected=null,timeLeft=60,timer;
+
+function showInstructions(){
+if(document.getElementById('name').value===""){alert("Enter Name");return;}
+document.getElementById('registrationPage').classList.add('hidden');
+document.getElementById('instructionPage').classList.remove('hidden');
+}
+
+function startExam(){
+document.getElementById('instructionPage').classList.add('hidden');
+document.getElementById('quizPage').classList.remove('hidden');
+loadQuestion();
+}
+
+function loadQuestion(){
+selected=null;
+document.getElementById('progress').innerText=`Question ${current+1} of ${quizData.length}`;
+document.getElementById('question').innerText=quizData[current].q;
+let opts=document.getElementById('options');
+opts.innerHTML="";
+quizData[current].o.forEach((x,i)=>{
+let b=document.createElement('button');
+b.className='option';
+b.innerText=x;
+b.onclick=()=>{
+selected=i;
+document.querySelectorAll('.option').forEach(v=>v.classList.remove('selected'));
+b.classList.add('selected');
+};
+opts.appendChild(b);
+});
+startTimer();
+}
+
+function startTimer(){
+clearInterval(timer);
+timeLeft=60;
+document.getElementById('timer').innerText='Time Left: 60s';
+timer=setInterval(()=>{
+timeLeft--;
+document.getElementById('timer').innerText='Time Left: '+timeLeft+'s';
+if(timeLeft<=0){
+clearInterval(timer);
+current++;
+if(current<quizData.length) loadQuestion(); else showResult();
+}
+},1000);
+}
+
+function nextQuestion(){
+if(selected===null){alert("Select an answer");return;}
+if(selected===quizData[current].a) score++;
+current++;
+if(current<quizData.length) loadQuestion(); else showResult();
+}
+
+function showResult(){
+clearInterval(timer);
+document.getElementById('quizPage').classList.add('hidden');
+document.getElementById('resultPage').classList.remove('hidden');
+
+document.getElementById('studentInfo').innerHTML=`
+<p><b>Name:</b> ${document.getElementById('name').value}</p>
+<p><b>USN:</b> ${document.getElementById('usn').value}</p>
+<p><b>Email:</b> ${document.getElementById('email').value}</p>`;
+
+document.getElementById('score').innerText=`Score: ${score}/10`;
+
+let c="";
+if(score>=8){
+c=`<div class='company'><h3>Google</h3><p>Role: Software Engineer | Package: 18 LPA</p><button onclick="window.open('https://careers.google.com')">Apply</button></div>
+<div class='company'><h3>Microsoft</h3><p>Role: Developer | Package: 16 LPA</p><button onclick="window.open('https://careers.microsoft.com')">Apply</button></div>`;
+}else if(score>=5){
+c=`<div class='company'><h3>Infosys</h3><p>Role: System Engineer | Package: 4.5 LPA</p></div>
+<div class='company'><h3>TCS</h3><p>Role: Associate Engineer | Package: 4 LPA</p></div>`;
+}else{
+c="<p>Improve your skills and try again.</p>";
+}
+document.getElementById('companies').innerHTML=c;
+}
+</script>
+</body>
+</html>
