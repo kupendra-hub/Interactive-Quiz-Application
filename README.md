@@ -34,7 +34,6 @@ Overall, the Interactive Quiz Application is an effective educational and assess
 
 <img width="1918" height="901" alt="Image" src="https://github.com/user-attachments/assets/a2ff4291-0136-40be-a851-036cc82d0d6c" />
 
-<img width="1918" height="910" alt="Image" src="https://github.com/user-attachments/assets/0e8f02e7-9e18-46c4-9c8f-c27951d13c29" />
-
 <img width="1918" height="907" alt="Image" src="https://github.com/user-attachments/assets/643e39d3-8cff-43d1-80a9-8a70129a4d52" />
 
+<img width="1918" height="910" alt="Image" src="https://github.com/user-attachments/assets/0e8f02e7-9e18-46c4-9c8f-c27951d13c29" />
