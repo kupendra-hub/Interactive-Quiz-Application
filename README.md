@@ -30,3 +30,7 @@ The user interface is designed using CSS to provide an attractive, modern, and r
 
 Overall, the Interactive Quiz Application is an effective educational and assessment tool that demonstrates important web development concepts including form handling, DOM manipulation, event handling, timers, score calculation, responsive design, and dynamic content generation. It serves as an excellent mini-project for students learning frontend web development and provides a practical example of creating interactive web applications using HTML, CSS, and JavaScript.
 
+*OUTPUT*
+
+<img width="1918" height="901" alt="Image" src="https://github.com/user-attachments/assets/a2ff4291-0136-40be-a851-036cc82d0d6c" />
+
